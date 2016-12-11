@@ -1,0 +1,27 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+<link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet">
+<link rel="stylesheet" type="text/css" href="{% static "lifespan/css/main.css" %}">
+
+</head>
+<body>
+<div class="content">
+    <h1>Lifespan</h1>
+    <canvas id="canvas" width="800" height="400"></canvas>
+    <div class="selectors">
+        {% if country_list %}
+        <select class="">
+            {% for country in country_list %}
+            <option value='{{country.country_code}}' >{{country.country_name}}</option>
+            {% endfor %}
+        </select>
+        {% else %}
+        <p>No countries are available.</p>
+        {% endif %}
+    </div>
+</div>
+<script data-main="{% static "lifespan/js/main" %}" src="{% static "lifespan/js/require.js" %}"></script>
+</body>
+</html>

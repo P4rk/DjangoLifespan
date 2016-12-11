@@ -15,7 +15,9 @@ from lifespan.services import get_rates_for_country
 # Create your views here.
 
 def home(request):
-  return HttpResponse("resp")
+  countries = Country.objects.all()
+  context = {'country_list':countries}
+  return render(request, 'lifespan/index.html', context)
 
 class JSONResponse(HttpResponse):
   def __init__(self, data, **kwargs):

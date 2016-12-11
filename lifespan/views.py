@@ -40,10 +40,12 @@ def country_detail(request, code):
   return JSONResponse('', status=400)
 
 @csrf_exempt
-def rate_for_country(request, code, indicator_name=None, year=None):
+def rate_for_country(request, code):
   if request.method == 'GET':
     country = get_country(code)
-    rates = get_rates_for_country(country, indicator_name=indicator_name, year=year)
+    indicator_name = request.GET.get('type', None) 
+    year = request.GET.get('year', None)
+    rates = get_rates_for_country(country, indicator_name, year)
     serializer = RateSerializer(rates, many=True)
     return JSONResponse(serializer.data)
   return JSONResponse('', status=400)

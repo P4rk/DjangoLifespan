@@ -76,7 +76,7 @@ requirejs(["bubbleSource", "jquery", "bubble"], function(bubbleSource, $, bubble
 
 require.config({
     paths: {
-        jquery: 'libs/jquery-3.1.1.slim.min',
+        jquery: 'libs/jquery-3.1.1.min',
         bubble: 'bubbles/bubble',
         bubbleSource: 'bubbles/bubbleSource'
     }

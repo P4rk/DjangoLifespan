@@ -63,8 +63,6 @@ def get_and_persist_rate(country, indicator_name, year=None):
   created_rates = []
   url = 'http://api.worldbank.org/countries/' + country.country_code + '/indicators/' + RATES[indicator_name]
   params = {'format': 'json'}
-  if year:
-    params['year'] = date + ':' + date
   r = requests.get(url, params=params)
   rates = r.json()
   for page in range(0 , rates[0].get('pages')):

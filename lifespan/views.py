@@ -7,7 +7,10 @@ from lifespan.models import Country
 from lifespan.models import Rate
 from lifespan.serializers import CountrySerializer
 from lifespan.serializers import RateSerializer
+from lifespan.serializers import RateYearSerializer
 import requests
+from django.db.models import Q
+#import services not methods from services 
 from lifespan.services import populate_all_countries
 from lifespan.services import get_country
 from lifespan.services import get_rates_for_country
@@ -16,7 +19,7 @@ from lifespan.services import get_rates_for_country
 
 def home(request):
   countries = Country.objects.all()
-  context = {'country_list':countries}
+  context = {}
   return render(request, 'lifespan/index.html', context)
 
 class JSONResponse(HttpResponse):
@@ -40,6 +43,16 @@ def country_detail(request, code):
     serializer = CountrySerializer(country)
     return JSONResponse(serializer.data)
   return JSONResponse('', status=400)
+
+def years_for_country(request, code):
+  if request.method == 'GET':
+    country = get_country(code)
+    get_rates_for_country(country)
+    rates = Rate.objects.filter(~Q(rate=0)).values('year').distinct().order_by('-year')
+    serializer = RateYearSerializer(rates, many=True)
+    return JSONResponse(serializer.data)
+  return JSONResponse('', status=400)
+    
 
 @csrf_exempt
 def rate_for_country(request, code):

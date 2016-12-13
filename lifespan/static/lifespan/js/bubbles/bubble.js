@@ -1,4 +1,4 @@
-define(["jquery"], function(jquery) {
+define([], function() {
 
     function bubble(x, y, height, normalizedLifeExpectancy, context, bubbleColour, bubbleAlpha) {
          this.x = x;

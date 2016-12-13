@@ -9,17 +9,24 @@
 <body>
 <div class="content">
     <h1>Lifespan</h1>
-    <canvas id="canvas" width="800" height="400"></canvas>
+    <canvas id="canvas" width="800" height="600"></canvas>
     <div class="selectors">
-        {% if country_list %}
-        <select class="">
-            {% for country in country_list %}
-            <option value='{{country.country_code}}' >{{country.country_name}}</option>
-            {% endfor %}
+        <select class="selector-1 country-selector">
         </select>
-        {% else %}
-        <p>No countries are available.</p>
-        {% endif %}
+        <select class="selector-2 country-selector">
+        </select>
+        <select class="selector-3 country-selector">
+        </select>
+        <select class="selector-4 country-selector">
+        </select>
+        <select class="selector-1 year-selector">
+        </select>
+        <select class="selector-2 year-selector">
+        </select>
+        <select class="selector-3 year-selector">
+        </select>
+        <select class="selector-4 year-selector">
+        </select>
     </div>
 </div>
 <script data-main="{% static "lifespan/js/main" %}" src="{% static "lifespan/js/require.js" %}"></script>

@@ -5,5 +5,13 @@ body {
 }
 .content {
     margin: auto;
-    width: 50%;
+    width: 60%;
+}
+.selectors {
+    display: inline;
+}
+.selectors select {
+    margin: 0 0 0 4%;
+    width:20%;
+
 }

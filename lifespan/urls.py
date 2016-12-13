@@ -8,5 +8,6 @@ urlpatterns = [
     url(r'country/$', views.country_list, name='country_list'),
     url(r'country/populate', services.populate_countries, name='populate_country'),
     url(r'country/(?P<code>\w+)/$', views.country_detail, name='country_detail'),
+    url(r'country/(?P<code>\w+)/dates$', views.years_for_country, name='years_for_country'),
     url(r'country/(?P<code>\w+)/rate/$', views.rate_for_country, name='rates_for_country'),
 ]

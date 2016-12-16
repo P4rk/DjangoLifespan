@@ -18,7 +18,6 @@ from lifespan.services import get_rates_for_country
 # Create your views here.
 
 def home(request):
-  countries = Country.objects.all()
   context = {}
   return render(request, 'lifespan/index.html', context)
 
@@ -31,7 +30,7 @@ class JSONResponse(HttpResponse):
 @csrf_exempt
 def country_list(request):
   if request.method == 'GET':
-    countries = Country.objects.all()
+    countries = Country.objects.all().order_by('country_name')
     serializer = CountrySerializer(countries, many=True)
     return JSONResponse(serializer.data)
   return JSONResponse('', status=400)
@@ -44,6 +43,7 @@ def country_detail(request, code):
     return JSONResponse(serializer.data)
   return JSONResponse('', status=400)
 
+@csrf_exempt
 def years_for_country(request, code):
   if request.method == 'GET':
     country = get_country(code)

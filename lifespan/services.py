@@ -88,6 +88,10 @@ def get_rate_for_country(country, indicator_name, year=None):
     return [Rate.objects.get(country=country, rate_type=indicator_name, year=conver_year_to_date(year))]
 
 def get_and_persist_rate(country, indicator_name):
+  """
+  Retrives a rate, using the indicator name for the specified country.
+  The rates for all years are retrived from the world bank api, persisted to the datebase nad returned.
+  """
   created_rates = []
   url = 'http://api.worldbank.org/countries/' + country.country_code + '/indicators/' + RATES[indicator_name]
   params = {'format': 'json'}
@@ -110,6 +114,6 @@ def get_and_persist_rate(country, indicator_name):
 
 def conver_year_to_date(year):
   """
-  Converts a YYYY string to a datetime object on the 1st January
+  Converts a YYYY string to a datetime object on the 1st January YYYY
   """
   return datetime.date(int(year),01,01)

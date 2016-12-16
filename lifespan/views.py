@@ -60,7 +60,7 @@ def years_for_country(request, code):
   if request.method == 'GET':
     country = services.get_country(code)
     services.get_rates_for_country(country)
-    rates = Rate.objects.filter(~Q(rate=0)).values('year').distinct().order_by('-year')
+    rates = Rate.objects.filter(country=country).filter(~Q(rate=0)).values('year').distinct().order_by('-year')
     serializer = RateYearSerializer(rates, many=True)
     return JSONResponse(serializer.data)
   return JSONResponse('', status=400)

@@ -8,7 +8,7 @@ class CountrySerializer(serializers.ModelSerializer):
   """
   class Meta:
     model = Country
-    field = ('country_name','country_code')
+    fields = ('country_name','country_code')
 
 class RateSerializer(serializers.ModelSerializer):
   """

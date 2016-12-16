@@ -10,10 +10,7 @@ from lifespan.serializers import RateSerializer
 from lifespan.serializers import RateYearSerializer
 import requests
 from django.db.models import Q
-#import services not methods from services 
-from lifespan.services import populate_all_countries
-from lifespan.services import get_country
-from lifespan.services import get_rates_for_country
+from lifespan import services
 
 # Create your views here.
 
@@ -38,7 +35,7 @@ def country_list(request):
 @csrf_exempt
 def country_detail(request, code):
   if request.method == 'GET':
-    country = get_country(code)
+    country = services.get_country(code)
     serializer = CountrySerializer(country)
     return JSONResponse(serializer.data)
   return JSONResponse('', status=400)
@@ -46,8 +43,8 @@ def country_detail(request, code):
 @csrf_exempt
 def years_for_country(request, code):
   if request.method == 'GET':
-    country = get_country(code)
-    get_rates_for_country(country)
+    country = services.get_country(code)
+    services.get_rates_for_country(country)
     rates = Rate.objects.filter(~Q(rate=0)).values('year').distinct().order_by('-year')
     serializer = RateYearSerializer(rates, many=True)
     return JSONResponse(serializer.data)
@@ -57,10 +54,10 @@ def years_for_country(request, code):
 @csrf_exempt
 def rate_for_country(request, code):
   if request.method == 'GET':
-    country = get_country(code)
+    country = services.get_country(code)
     indicator_name = request.GET.get('type', None) 
     year = request.GET.get('year', None)
-    rates = get_rates_for_country(country, indicator_name, year)
+    rates = services.get_rates_for_country(country, indicator_name, year)
     serializer = RateSerializer(rates, many=True)
     return JSONResponse(serializer.data)
   return JSONResponse('', status=400)

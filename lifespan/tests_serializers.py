@@ -14,7 +14,7 @@ class SerializersTestCase(TestCase):
   def testCountrySerializer(self):
     country = Country.objects.get(country_code='code')
     serializer = CountrySerializer(country)
-    self.assertEquals(str(serializer.data), "{'country_name': u'test_name', u'id': 5, 'country_code': u'code'}")
+    self.assertEquals(str(serializer.data), "{'country_name': u'test_name', 'country_code': u'code'}")
 
   def testRateSerializer(self):
     rate = Rate.objects.get(rate_type='test_rate')

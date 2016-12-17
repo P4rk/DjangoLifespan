@@ -64,7 +64,7 @@ define(["bubble","jquery"], function(bubble, jquery) {
          */
         draw: function () {
             if(this.active) {
-                this.context.globalAlpha=1;
+                this.context.globalAlpha=0.1;
                 this.context.fillStyle="#FFF";
                 this.context.fillText("Country: " +this.name,this.x-85,this.y+15);
                 this.context.fillText("Birthrate: " +this.birthrate + "(" + this.normalizedBirthrate +")",this.x-85,this.y+30);

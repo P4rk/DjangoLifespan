@@ -1,5 +1,9 @@
 requirejs(["bubbleSource", "jquery", "bubble"], function(bubbleSource, $, bubble) {
-  window.requestAnimFrame = (function(callback) {
+
+  /**
+   * function used by the animation method to draw and update the canvas.
+   */
+   window.requestAnimFrame = (function(callback) {
     return window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || window.oRequestAnimationFrame || window.msRequestAnimationFrame ||
       function(callback) {
         window.setTimeout(callback, 500 / 60);
@@ -17,6 +21,13 @@ requirejs(["bubbleSource", "jquery", "bubble"], function(bubbleSource, $, bubble
   minBirthRateNormalization = 0.1;
   maxBirthRateNormalization = 0.9;
 
+  /**
+   * This method will normalize all the rates that are currently selected.
+   * The min and max rate normalizations are used to cap the values.
+   *
+   * We invert the normalized BirthRate as cordinates 0,0 are at the top left
+   * of the canvas, not the bottom left.
+   */
   function renormalizeSource() {
     maxBirthRate = 0;
     minBirthRate = Number.MAX_VALUE;
@@ -51,6 +62,9 @@ requirejs(["bubbleSource", "jquery", "bubble"], function(bubbleSource, $, bubble
     });
   }
 
+  /**
+   * Setup function adding four bubble sources to the bubble source array.
+   */
   function addBubbleSources() {
     var b0 = new bubbleSource(95, canvas.height-50, canvas.height-50, "name", 1, 1, context, "#FFF", 1);
     var b1 = new bubbleSource(95, canvas.height-50, canvas.height-50, "name", 1, 1, context, "#FFF", 1);
@@ -62,14 +76,28 @@ requirejs(["bubbleSource", "jquery", "bubble"], function(bubbleSource, $, bubble
     bubbleSources[3] = b3;
   }
 
+  /**
+   * Re creates a bubble source at the given index,
+   * @param index the index the bubble source should be recreated at.
+   * @param name the name of the bubble used to display when debugging
+   * @param birthrate the non-normalized birth rate
+   * @param lifeExpectancy the non-normalized life expectancy
+   */
   function recreateBubbleSource(index, name, birthrate, lifeExpectancy){
-    console.log(index);
     var b = new bubbleSource(0, canvas.height-50, canvas.height-50, name, birthrate, lifeExpectancy, context, "#FFF", 1);
     bubbleSources[index] = b;
     b.active = true;
     renormalizeSource();
   }
 
+  /**
+   * Makes an ajax call to get the birthrate and life expectancy for 
+   * the selected country and year
+   * @param index the index of the bubble to get the information for
+   * @param selectorId the class of the select options, 
+   *                   used to get the country and rates. 
+   *                   Expected to be selector-\d{1}.
+   */
   function getBubbleSourceInfo(index, selectorId){
     var countryCode = getCountryCode(selectorId);
     var year = getYear(selectorId);
@@ -92,28 +120,54 @@ requirejs(["bubbleSource", "jquery", "bubble"], function(bubbleSource, $, bubble
     
   }
 
+  /**
+   * Returns the css selector for the country select element.
+   * @param selectorId the class of the select options.
+   */
   function getCountrySelector(selectorId) {
     return selectorId+'.country-selector';
   }
-  function getYearSelector(selectorId){
+
+  /**
+   * Returns the css selector for the year select element.
+   * @param selectorId the class of the select options.
+   */
+  function getYearSelector(selectorId) {
     return selectorId+'.year-selector';
   }
+
+  /**
+   * Returns the country code selected from country dropdown.
+   * @param selectorId the class of the select options.
+   */
   function getCountryCode(selectorId) {
     return $(selectorId+'.country-selector').val();
   }
+
+  /**
+   * Returns the year selected from the year dropdown.
+   * @param selectorId the class of the select options.
+   */
   function getYear(selectorId) {
     return $(selectorId+'.year-selector').val();
   }
 
+  /**
+   * Returns the index of the bubble source this selector class refers to.
+   * @param selectorId the class of the select options.
+   */
   function getIndex(selectorId) {
     return selectorId.replace('.selector-','') - 1;
   }
 
+  /**
+   * Updates the list of years in the dropdown menu.
+   * @param selectorId the class of the select options.
+   */
   function updateDateSelector(selectorId) {
     var countryCode = getCountryCode(selectorId);
     var yearSelector = getYearSelector(selectorId);
     var url = 'country/' + countryCode + '/dates';
-    console.log(url);
     $(yearSelector).find('option').remove().end();
     $.getJSON(url, function(json){
       $(yearSelector).append("<option value=''>Select a year</option>");
@@ -123,6 +177,10 @@ requirejs(["bubbleSource", "jquery", "bubble"], function(bubbleSource, $, bubble
     });
   }
 
+  /**
+   * Populates the selector dropdown with the list of countries.
+   * @param selectorId the class used to identify the selector dropdowns
+   */
   function populateCountryDropdown(selectorId) {
     var url = 'country';
     var countrySelectorId = getCountrySelector(selectorId);
@@ -134,6 +192,10 @@ requirejs(["bubbleSource", "jquery", "bubble"], function(bubbleSource, $, bubble
     });
   }
 
+  /**
+   * Animation function used to draw and update the 2d canvas.
+   * Calls itself via the requestAnimFrame method.
+   */
   function animate() {
     var width = $('.content').width();
     document .getElementById('canvas').setAttribute('width',width);
@@ -149,11 +211,13 @@ requirejs(["bubbleSource", "jquery", "bubble"], function(bubbleSource, $, bubble
     });
   }
 
+  //Changes to the country dropdown should update the date seletor
   $('.country-selector').change(function() {
     var clazz = $(this).attr('class');
     updateDateSelector('.'+clazz.replace(' country-selector',''));
   });
 
+  //Changes to the date selector should update the bubble sources.
   $('.year-selector').change(function() {
     var clazz = $(this).attr('class');
     getBubbleSourceInfo(0,'.'+clazz.replace(' year-selector',''));

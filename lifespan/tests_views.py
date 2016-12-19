@@ -16,13 +16,13 @@ class ViewTestCase(TestCase):
     ViewTestCase.bad_request.method = 'POST'
     ViewTestCase.good_request.method = 'GET'
 
-    countryOne = Country.objects.create(country_name="testCountryOne", country_code="TCO")
-    countryTwo = Country.objects.create(country_name="testCountryTwo", country_code="TCT")
+    country_one = Country.objects.create(country_name="testCountryOne", country_code="TCO")
+    country_two = Country.objects.create(country_name="testCountryTwo", country_code="TCT")
 
-    Rate.objects.create(country=countryOne, rate_type = ViewTestCase.BIRTH_INDICATOR_NAME, rate = 0.5, year='2000-01-01')
-    Rate.objects.create(country=countryOne, rate_type = ViewTestCase.BIRTH_INDICATOR_NAME, rate = 0.5, year='2001-01-01')
-    Rate.objects.create(country=countryOne, rate_type = ViewTestCase.LIFESPAN_INDICATOR_NAME, rate = 100, year='2000-01-01')
-    Rate.objects.create(country=countryOne, rate_type = ViewTestCase.LIFESPAN_INDICATOR_NAME, rate = 100, year='2001-01-01')
+    Rate.objects.create(country=country_one, rate_type = ViewTestCase.BIRTH_INDICATOR_NAME, rate = 0.5, year='2000-01-01')
+    Rate.objects.create(country=country_one, rate_type = ViewTestCase.BIRTH_INDICATOR_NAME, rate = 0.5, year='2001-01-01')
+    Rate.objects.create(country=country_one, rate_type = ViewTestCase.LIFESPAN_INDICATOR_NAME, rate = 100, year='2000-01-01')
+    Rate.objects.create(country=country_one, rate_type = ViewTestCase.LIFESPAN_INDICATOR_NAME, rate = 100, year='2001-01-01')
 
   def test_home(self):
     rsp = views.home(ViewTestCase.good_request)

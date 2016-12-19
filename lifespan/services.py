@@ -46,10 +46,10 @@ def get_country_from_api(code):
   url = 'http://api.worldbank.org/countries/' + code
   params = {'format': 'json'}
   r = requests.get(url, params=params)
-  jsonCountry = r.json()
+  json_country = r.json()
   try: 
-    name = jsonCountry[1][0].get('name')
-    code = jsonCountry[1][0].get('id')
+    name = json_country[1][0].get('name')
+    code = json_country[1][0].get('id')
     return Country.objects.create(country_name=name, country_code=code) 
   #except IndexError, the world bank api returns 200's even if there isn't a country for that country code
   except IndexError:
